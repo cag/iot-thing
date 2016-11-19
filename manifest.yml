@@ -3,6 +3,7 @@ applications:
   memory: 128M
   instances: 1
   domain: mybluemix.net
-  name: iot-thing
-  host: iot-thing
+  name: iot-thing2
+  host: iot-thing2
   disk_quota: 1024M
+  buildpack: python_buildpack
