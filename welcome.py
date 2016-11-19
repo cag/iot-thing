@@ -13,32 +13,27 @@
 # limitations under the License.
 
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+latest_data = {}
 
 @app.route('/')
-def Welcome():
+def home():
     return app.send_static_file('index.html')
 
-@app.route('/myapp')
-def WelcomeToMyapp():
-    return 'Welcome again to my app running on Bluemix!'
+FIELDS = ["humidity", "accelX", "accelY", "accelZ", "magnX", "magnY", "magnZ",]
+@app.route('/send-data')
+def receive_data():
+    for f in FIELDS:
+        if f in request.args:
+            latest_data[f] = request.args[f]
+    # return jsonify(response)
+    return ('', 204)
 
-@app.route('/api/people')
-def GetPeople():
-    list = [
-        {'name': 'John', 'age': 28},
-        {'name': 'Bill', 'val': 26}
-    ]
-    return jsonify(results=list)
-
-@app.route('/api/people/<name>')
-def SayHello(name):
-    message = {
-        'message': 'Hello ' + name
-    }
-    return jsonify(results=message)
+@app.route('/data')
+def fdsafdsa():
+    return jsonify(latest_data)
 
 port = os.getenv('PORT', '5000')
 if __name__ == "__main__":
