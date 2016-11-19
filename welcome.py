@@ -22,7 +22,7 @@ latest_data = {}
 def home():
     return app.send_static_file('index.html')
 
-FIELDS = ["humidity", "accelX", "accelY", "accelZ", "magnX", "magnY", "magnZ",]
+FIELDS = ["temp", "humidity", "accelX", "accelY", "accelZ", "magnX", "magnY", "magnZ",]
 @app.route('/send-data')
 def receive_data():
     for f in FIELDS:
