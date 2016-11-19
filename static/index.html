@@ -1,1 +1,66 @@
-lol
+<div id="player"></div>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+<!-- <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script> -->
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+$.get('/data').then(function(res) {
+  console.log(res);
+}, function(err) {
+  console.log(err);
+})
+
+// 2. This code loads the IFrame Player API code asynchronously.
+var tag = document.createElement('script');
+
+tag.src = "//www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// 3. This function creates an <iframe> (and YouTube player)
+//    after the API code downloads.
+var player;
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '390',
+    width: '640',
+    // videoId: 'M7lc1UVf-VE',
+    events: {
+      'onReady': function (event) {
+        console.log(event);
+      },
+      'onStateChange': function(event) {
+        console.log(event);
+      }
+    }
+  });
+}
+
+gapi.load('client', function() {
+  gapi.client.init({
+    'apiKey': 'AIzaSyCT27bUGZZ2Q7BsFxGfN7SPszT0kBwQof8',
+    'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
+  }).then(function() {
+    return gapi.client.youtube.search.list({
+      part: 'snippet',
+      videoCategoryId: '10', // music
+      type: 'video',
+      regionCode: 'us',
+      maxResults: 50,
+      q: 'stupid',
+    });
+  }).then(function(res) {
+    console.log(res);
+    var idx = Math.floor(Math.random() * res.result.items.length);
+    player.loadVideoById(res.result.items[idx].id);
+  }, function(err) {
+    console.error(err);
+  });
+});
+
+</script>
